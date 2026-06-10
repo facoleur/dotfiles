@@ -1,0 +1,6 @@
+zed
+appimagelauncher
+firefox
+fish
+ncdu
+soundux

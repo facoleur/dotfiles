@@ -1,0 +1,4 @@
+# Liste des AppImages a installer
+# format: id|name|url|categories
+
+ledger-live|Ledger Live|https://download.live.ledger.com/latest/linux?c=1|Finance
