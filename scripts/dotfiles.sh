@@ -38,5 +38,7 @@ echo ""
 info "Applying dotfiles with stow..."
 stow --adopt -d "$DOTFILES_DIR" -t "$HOME" home
 
+xdg-user-dirs-update
+
 echo ""
 printf "  ${GREEN}Dotfiles applied successfully.${RESET}\n"
