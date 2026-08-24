@@ -28,3 +28,6 @@ alias zedium='~/zed/target/release/zed'
 # vscode ctrl+shift+e conflict
 bind \ce ''
 bind \cE ''
+
+starship init fish | source
+zoxide init fish | source

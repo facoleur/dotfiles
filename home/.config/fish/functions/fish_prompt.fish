@@ -13,6 +13,6 @@ function fish_prompt
     if test -n "$branch"
         echo -n -s (set_color --bold blue) "["  $branch "]"
     end
-    echo -n -s  (set_color --bold yellow)   "[" $cwd "] " (set_color normal)
+    echo -n -s  (set_color --bold '#ffe033')   "[" $cwd "] " (set_color normal)
 end
 
