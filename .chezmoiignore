@@ -1,0 +1,43 @@
+{{/* ===== Secrets et etats locaux : presents sur le disque, jamais dans le repo ===== */}}
+.config/gh/hosts.yml
+.config/Soundux          {{/* etat runtime : sons, volumes, chemins absolus */}}
+.config/fish/fish_variables
+.claude/settings.json      {{/* definit des permissions : a gerer a la main */}}
+
+{{/* ===== Gere par fisher (cf. fish_plugins), pas par chezmoi ===== */}}
+.config/fish/functions/fisher.fish
+.config/fish/functions/bass.fish
+.config/fish/functions/__bass.py
+.config/fish/completions
+
+{{/* ===== Genere par les installeurs (uv, fish 4.3) ===== */}}
+.config/fish/conf.d
+
+{{/* ===== Vit a la racine du repo, pas dans $HOME ===== */}}
+README.md
+packages-arch.txt
+packages-apt.txt
+
+{{ if ne .profile "desktop" -}}
+{{/* ===== Desktop Omarchy : rien de tout ca sur un server ===== */}}
+.config/hypr
+.config/waybar
+.config/walker
+.config/omarchy
+.config/kitty
+.config/user-dirs.dirs
+.config/mimeapps.list
+.config/chromium-flags.conf
+.config/xdg-terminals.list
+
+{{/* Fonctions fish qui dependent de fzf / code / kitten / opencode */}}
+.config/fish/functions/c.fish
+.config/fish/functions/vf.fish
+.config/fish/functions/coder.fish
+.config/fish/functions/kssh.fish
+.config/fish/functions/oc.fish
+{{- end }}
+
+appimages.txt
+
+finalise-migration.sh

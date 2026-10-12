@@ -1,0 +1,19 @@
+{{/* Profil derive de l'OS : Arch (Omarchy) = desktop, tout le reste = server.
+     Override pour tester/forcer : DOTFILES_PROFILE=server chezmoi apply */}}
+{{- $id := "" -}}
+{{- if hasKey .chezmoi "osRelease" -}}
+{{-   $id = (.chezmoi.osRelease.id | default "") -}}
+{{- end -}}
+{{- $profile := "server" -}}
+{{- if eq $id "arch" -}}
+{{-   $profile = "desktop" -}}
+{{- end -}}
+{{- if env "DOTFILES_PROFILE" -}}
+{{-   $profile = env "DOTFILES_PROFILE" -}}
+{{- end -}}
+
+[data]
+    profile = {{ $profile | quote }}
+    name = "Luca Ferro"
+    email = "github@lucaferro.ch"
+    signingkey = "1171560610B61D1B"

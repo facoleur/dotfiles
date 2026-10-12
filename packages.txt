@@ -1,9 +1,0 @@
-zed
-appimagelauncher
-firefox
-fish
-ncdu
-soundux
-z
-rg
-fd

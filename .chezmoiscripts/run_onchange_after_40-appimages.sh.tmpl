@@ -1,0 +1,39 @@
+{{ if eq .profile "desktop" -}}
+#!/bin/bash
+# AppImages : telechargees dans ~/.local/bin + entree de menu.
+# La liste est inlinee, donc run_onchange rejoue le script quand elle change.
+set -euo pipefail
+
+BIN_DIR="$HOME/.local/bin"
+DESKTOP_DIR="$HOME/.local/share/applications"
+mkdir -p "$BIN_DIR" "$DESKTOP_DIR"
+
+install_appimage() {
+  local id="$1" name="$2" url="$3" categories="${4:-Utility}"
+  local bin="$BIN_DIR/$id.AppImage"
+
+  echo "==> $name"
+  curl -fL --progress-bar "$url" -o "$bin"
+  chmod +x "$bin"
+
+  cat > "$DESKTOP_DIR/$id.desktop" <<DESKTOP
+[Desktop Entry]
+Name=$name
+Exec=$bin
+Icon=$id
+Type=Application
+Categories=$categories
+Terminal=false
+DESKTOP
+}
+
+while IFS='|' read -r id name url categories; do
+  [[ "$id" =~ ^[[:space:]]*# || -z "${id// }" ]] && continue
+  install_appimage "$id" "$name" "$url" "$categories"
+done <<'APPIMAGES'
+{{ include "appimages.txt" }}
+APPIMAGES
+{{- else -}}
+#!/bin/bash
+# profil server : pas d'AppImages
+{{- end }}

@@ -1,0 +1,21 @@
+add_newline = false
+format = "${custom.venv}$git_branch$directory"
+
+
+[directory]
+format = '[\[$path\] ](bold #ffe033)'
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+truncate_to_repo = false
+
+[python]
+disabled = true
+
+[custom.venv]
+command = 'basename "$VIRTUAL_ENV"'
+when = 'test -n "$VIRTUAL_ENV"'
+format = '[\($output\)](dimmed white)'
+
+[git_branch]
+format = '[\[$branch\]](bold blue)'
+symbol = ""

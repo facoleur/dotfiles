@@ -1,0 +1,12 @@
+#!/bin/bash
+# fish comme shell de login, une seule fois.
+set -euo pipefail
+
+fish_path=$(command -v fish || true)
+[ -z "$fish_path" ] && { echo "fish absent, shell inchange"; exit 0; }
+
+if [ "$SHELL" != "$fish_path" ]; then
+  grep -qxF "$fish_path" /etc/shells || echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
+  echo "==> chsh -s $fish_path"
+  chsh -s "$fish_path"
+fi

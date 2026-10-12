@@ -1,0 +1,68 @@
+#!/bin/bash
+# Outils absents des depots. Idempotent : chaque bloc verifie avant d'installer.
+set -euo pipefail
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# ---------------------------------------------------------------- les 2 profils
+if ! have starship; then
+  echo "==> starship"
+  curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
+
+if ! have claude; then
+  echo "==> claude code"
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+if ! have uv; then
+  echo "==> uv"
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+
+# fisher + plugins declares dans fish_plugins
+if have fish && ! fish -c 'functions -q fisher' 2>/dev/null; then
+  echo "==> fisher"
+  fish -c 'curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher'
+fi
+if have fish && fish -c 'functions -q fisher' 2>/dev/null; then
+  fish -c 'fisher update' >/dev/null
+fi
+
+{{ if ne .profile "desktop" }}
+# -------------------------------------------------------------- server seulement
+
+# Noms Debian : bat -> batcat, fd -> fdfind. Sans ces liens, ls.fish et les
+# abbreviations cassent.
+mkdir -p "$HOME/.local/bin"
+if have batcat && [ ! -e "$HOME/.local/bin/bat" ]; then
+  ln -s "$(command -v batcat)" "$HOME/.local/bin/bat"
+fi
+if have fdfind && [ ! -e "$HOME/.local/bin/fd" ]; then
+  ln -s "$(command -v fdfind)" "$HOME/.local/bin/fd"
+fi
+
+# terminfo kitty : sinon une session SSH depuis kitty casse l'affichage
+if ! dpkg -s kitty-terminfo >/dev/null 2>&1; then
+  sudo apt-get install -y kitty-terminfo || true
+fi
+
+if ! have docker; then
+  echo "==> docker"
+  curl -fsSL https://get.docker.com | sudo sh
+  sudo usermod -aG docker "$USER"
+  echo "    (deconnexion/reconnexion necessaire pour le groupe docker)"
+fi
+
+if ! have caddy; then
+  echo "==> caddy"
+  sudo apt-get install -y debian-keyring debian-archive-keyring apt-transport-https
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
+    | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
+    | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
+  sudo apt-get update -qq
+  sudo apt-get install -y caddy
+  echo "    Caddyfile non versionne : /etc/caddy/Caddyfile est propre a ce VPS"
+fi
+{{- end }}

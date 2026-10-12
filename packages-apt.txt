@@ -1,0 +1,18 @@
+# Socle VPS Debian/Ubuntu : strict minimum, rien d'interactif superflu.
+# starship, claude, docker et caddy sont installes par 20-tools (pas dans apt).
+
+fish
+tmux
+git
+gh
+curl
+ca-certificates
+gnupg
+ripgrep
+fd-find
+bat
+eza
+du-dust
+zoxide
+mosh
+unattended-upgrades

@@ -1,0 +1,20 @@
+# Paquets installes a la main sur Omarchy (yay).
+# Tout ce que fournit Omarchy de base n'est PAS liste ici : omarchy le gere.
+
+# --- apps ---
+visual-studio-code-bin
+kitty
+transmission-gtk
+soundux
+appimagelauncher
+showmethekey
+
+# --- shell & CLI ---
+fish
+mosh
+gh
+
+# --- dev ---
+go
+pre-commit
+marp-cli

@@ -1,0 +1,38 @@
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+end
+
+# ~/.local/bin : chezmoi, starship, claude, uv y vivent
+fish_add_path -g "$HOME/.local/bin"
+
+{{ if eq .profile "desktop" -}}
+# --- agent SSH (desktop uniquement : en SSH l'agent est forward par le client) ---
+if not pgrep -u (whoami) ssh-agent >/dev/null
+    ssh-agent -c | source
+end
+ssh-add ~/.ssh/id2 2>/dev/null
+
+# --- toolchains JS ---
+set -gx PNPM_HOME "{{ .chezmoi.homeDir }}/.local/share/pnpm"
+fish_add_path -g "$PNPM_HOME"
+
+set -gx BUN_INSTALL "$HOME/.bun"
+fish_add_path -g "$BUN_INSTALL/bin"
+
+# --- foundry (solidity) ---
+fish_add_path -a "{{ .chezmoi.homeDir }}/.config/.foundry/bin"
+
+# --- VS Code : liberer ctrl+e, capture par l'editeur ---
+bind \ce ''
+bind \cE ''
+{{- end }}
+
+starship init fish | source
+zoxide init fish | source
+
+abbr -a g "git"
+abbr -a gs "git status"
+abbr -a ga "git add"
+abbr -a gp "git push"
+abbr -a gl "git pull"
+abbr -a gc --set-cursor 'git commit -m "%"'

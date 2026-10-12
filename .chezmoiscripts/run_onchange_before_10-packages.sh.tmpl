@@ -1,0 +1,31 @@
+#!/bin/bash
+# Installe les paquets du profil. La liste est inlinee ci-dessous : toute
+# modification change ce script, donc run_onchange le rejoue automatiquement.
+set -euo pipefail
+
+{{ if eq .profile "desktop" -}}
+pkgs=$(grep -vE '^#|^$' <<'PKGLIST'
+{{ include "packages-arch.txt" }}
+PKGLIST
+)
+echo "==> yay: $(echo "$pkgs" | wc -l) paquets"
+# shellcheck disable=SC2086
+yay -S --needed --noconfirm $pkgs
+{{- else -}}
+pkgs=$(grep -vE '^#|^$' <<'PKGLIST'
+{{ include "packages-apt.txt" }}
+PKGLIST
+)
+echo "==> apt: $(echo "$pkgs" | wc -l) paquets"
+sudo apt-get update -qq
+# Install groupee ; si un paquet manque sur cette release (eza et du-dust sont
+# recents), on retombe sur du un-par-un pour ne pas tout faire echouer.
+# shellcheck disable=SC2086
+if ! sudo apt-get install -y --no-install-recommends $pkgs; then
+  echo "==> install groupee echouee, reprise paquet par paquet"
+  for p in $pkgs; do
+    sudo apt-get install -y --no-install-recommends "$p" \
+      || echo "    ignore (indisponible sur cette release) : $p"
+  done
+fi
+{{- end }}
