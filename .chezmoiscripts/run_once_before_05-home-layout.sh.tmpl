@@ -1,0 +1,27 @@
+{{ if eq .profile "desktop" -}}
+#!/bin/bash
+# Structure de dossiers du home. Idempotent : mkdir -p ne touche pas l'existant.
+set -euo pipefail
+
+for d in brain docs projects scratch scratch/screenshots downloads vms; do
+  [ -d "$HOME/$d" ] || { mkdir -p "$HOME/$d"; echo "cree : ~/$d"; }
+done
+
+# ~/Downloads : doublon capitalise recree par certaines apps quand
+# XDG_DOWNLOAD_DIR vaut $HOME. On le retire, mais seulement s'il est vide.
+if [ -d "$HOME/Downloads" ]; then
+  if rmdir "$HOME/Downloads" 2>/dev/null; then
+    echo "supprime : ~/Downloads (vide)"
+  else
+    echo "ATTENTION : ~/Downloads n'est pas vide, laisse en place"
+    echo "            deplace son contenu vers ~/downloads puis relance"
+  fi
+fi
+
+# Empeche xdg-user-dirs-update de reecrire user-dirs.dirs : c'est chezmoi
+# qui en est maitre.
+printf 'enabled=False\n' > "$HOME/.config/user-dirs.conf"
+{{- else -}}
+#!/bin/bash
+# profil server : pas de structure de dossiers desktop
+{{- end }}

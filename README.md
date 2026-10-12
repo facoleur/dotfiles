@@ -53,6 +53,7 @@ sinon elle sera écrasée au prochain `apply`.
 ├── .chezmoi.toml.tmpl      # détecte l'OS -> .profile (desktop|server)
 ├── .chezmoiignore          # LA séparation desktop/server
 ├── .chezmoiscripts/
+│   ├── run_once_before_05-home-layout.sh.tmpl    # desktop : structure du home
 │   ├── run_onchange_before_10-packages.sh.tmpl   # yay (arch) vs apt (debian)
 │   ├── run_onchange_after_20-tools.sh.tmpl       # starship, claude, uv, fisher, docker, caddy
 │   ├── run_once_after_30-shell.sh.tmpl           # chsh -s fish
@@ -64,6 +65,20 @@ sinon elle sera écrasée au prochain `apply`.
 ├── dot_claude/             # -> ~/.claude (settings.json + CLAUDE.md seulement)
 └── dot_bashrc, dot_profile, …
 ```
+
+## Structure du home (desktop)
+
+Posée par `run_once_before_05-home-layout.sh` sur une machine neuve :
+
+```txt
+~/brain  ~/docs  ~/projects  ~/scratch  ~/scratch/screenshots  ~/downloads  ~/vms
+```
+
+`~/Downloads` (capitalisé) est supprimé s'il est vide : c'est un doublon que
+certaines apps recréent quand `XDG_DOWNLOAD_DIR` vaut `$HOME`. Pour l'empêcher
+de revenir, `user-dirs.dirs` pointe explicitement sur les dossiers réels
+(`$HOME/downloads`, `$HOME/docs`) et `user-dirs.conf` porte `enabled=False`
+pour que `xdg-user-dirs-update` ne réécrive plus le fichier.
 
 ## Ce qui n'est volontairement pas versionné
 
