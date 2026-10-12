@@ -4,3 +4,6 @@ firefox
 fish
 ncdu
 soundux
+z
+rg
+fd
