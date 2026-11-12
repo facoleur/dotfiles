@@ -1,6 +1,11 @@
 add_newline = false
-format = "${custom.venv}$git_branch$directory"
+format = "${custom.venv}$git_branch$hostname$directory"
 
+
+[hostname]
+ssh_only = true
+format = '[\[$hostname\]](bold green)'
+disabled = false
 
 [directory]
 format = '[\[$path\] ](bold #ffe033)'
