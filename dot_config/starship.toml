@@ -1,5 +1,5 @@
 add_newline = false
-format = "${custom.venv}$git_branch$hostname$directory"
+format = "$hostname${custom.venv}$git_branch$directory"
 
 
 [hostname]
